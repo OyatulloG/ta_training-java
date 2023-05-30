@@ -7,13 +7,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import java.time.Duration;
 
 public class YahooLoginPage extends AbstractPage {
     private final String PAGE_URL = "https://login.yahoo.com";
     private final Logger logger = LogManager.getRootLogger();
+        
+    private By accountSwitcherThreeDotsButtonBy = By.xpath("//*[@id='account-switcher-form']//*[@class='card-right']");        
+    private By removeAccountButtonBy = By.xpath("//*[@data-action='remove-account']");
         
     @FindBy(id = "login-username")
     private WebElement usernameEmailOrMobileTextBox;
@@ -22,8 +22,12 @@ public class YahooLoginPage extends AbstractPage {
     private WebElement signInButton;
     
     private By passwordTextBoxBy = By.id("login-passwd");
-    private By emailNotRegisteredTextBoxBy = By.id("username-error");
-    private By wrongPasswordTextBoxBy = By.xpath("//*[@id='password-container']/following-sibling::*[@class='error-msg']");
+    
+    @FindBy(id = "username-error")
+    private WebElement emailNotRegisteredTextBox;
+    
+    @FindBy(xpath = "//*[@id='password-container']/following-sibling::*[@class='error-msg']")
+    private WebElement wrongPasswordTextBox;
             
     public YahooLoginPage(WebDriver driver) {
       super(driver);
@@ -36,30 +40,37 @@ public class YahooLoginPage extends AbstractPage {
       return this;
     }
     
+    public void removeAccount() {
+      driverWaitForElementToBeClickable(accountSwitcherThreeDotsButtonBy, WAIT_TIMEOUT_SECONDS).click();
+      driverWaitForElementToBeClickable(removeAccountButtonBy, WAIT_TIMEOUT_SECONDS).click();
+    }
+    
     public YahooLoginPage enterEmail(String email) {
       usernameEmailOrMobileTextBox.sendKeys(email);     
-      signInButton.click();
       return this;
     }
     
-    public YahooHomePage enterPassword(String password) {
-      WebElement passwordTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.elementToBeClickable(passwordTextBoxBy));
-      passwordTextBox.sendKeys(password);            
+    public YahooLoginPage clickNextButton() {
+      signInButton.click();
+      return this;    
+    }
+    
+    public YahooLoginPage enterPassword(String password) {
+      driverWaitForElementToBeClickable(passwordTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(password);
+      return this;
+    }
+    
+    public YahooHomePage clickSignInButton() {
       signInButton.click();
       logger.info("Login performed");
-      return new YahooHomePage(driver);
+      return new YahooHomePage(driver);      
     }
     
     public boolean isEmailNotRegistered() {
-      WebElement emailNotRegisteredTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.presenceOfElementLocated(emailNotRegisteredTextBoxBy));
-      return (emailNotRegisteredTextBox != null) ? true : false;
+      return driverWaitForVisibilityOf(emailNotRegisteredTextBox, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }
     
     public boolean isPasswordWrong() {
-      WebElement wrongPasswordTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.presenceOfElementLocated(wrongPasswordTextBoxBy));
-      return (wrongPasswordTextBox != null) ? true : false;
+      return driverWaitForVisibilityOf(wrongPasswordTextBox, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }    
 }

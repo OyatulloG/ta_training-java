@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">	
+<suite name="Integration verifyMailSentFromYahooToMailRu" verbose="1">
+  <test name="Integration verifyMailSentFromYahooToMailRu">
+    <classes>
+      <class name="com.epam.training.oyatullogulomjonov.test.IntegrationTest">
+        <methods>
+          <include name="verifyMailSentFromYahooToMailRu" />
+        </methods>
+      </class>
+    </classes>
+  </test>
+</suite>

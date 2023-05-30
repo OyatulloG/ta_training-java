@@ -3,58 +3,36 @@ package com.epam.training.oyatullogulomjonov.service;
 import com.epam.training.oyatullogulomjonov.model.Mail;
 
 public class YahooMailCreator extends MailCreator {
-    private final String TESTDATA_MAIL_SENT_TO = "testdata.yahoo.mail.sent.to";
-    private final String TESTDATA_MAIL_SENT_SUBJECT = "testdata.yahoo.mail.sent.subject";
-    private final String TESTDATA_MAIL_SENT_CONTENT = "testdata.yahoo.mail.sent.content";
-    private final String TESTDATA_MAIL_RECEIVED_FROM = "testdata.yahoo.mail.received.from";
-    private final String TESTDATA_MAIL_RECEIVED_SUBJECT = "testdata.yahoo.mail.received.subject";
-    private final String TESTDATA_MAIL_RECEIVED_CONTENT = "testdata.yahoo.mail.received.content";
-        
+    private final String TESTDATA_MAIL = "testdata.yahoo.mail";    
+    private final String TESTDATA_MAIL_TO = "testdata.yahoo.mail.to";
+    private final String TESTDATA_MAIL_SUBJECT = "testdata.yahoo.mail.subject";
+    private final String TESTDATA_MAIL_CONTENT = "testdata.yahoo.mail.content";
+    
     @Override
-    public Mail sentWithAllCredentials() {
-      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL_SENT_TO),
-      			TestDataReader.getTestData(TESTDATA_MAIL_SENT_SUBJECT),
-      			TestDataReader.getTestData(TESTDATA_MAIL_SENT_CONTENT));
+    public Mail withAllCredentials() {
+      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL),
+      			TestDataReader.getTestData(TESTDATA_MAIL_TO),
+      			TestDataReader.getTestData(TESTDATA_MAIL_SUBJECT),
+      			TestDataReader.getTestData(TESTDATA_MAIL_CONTENT));
     }
     
     @Override
-    public Mail sentWithEmptySubject() {
-      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL_SENT_TO), "",
-      			TestDataReader.getTestData(TESTDATA_MAIL_SENT_CONTENT));
+    public Mail withEmptySubject() {
+      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL),
+      			TestDataReader.getTestData(TESTDATA_MAIL_TO), "",
+      			TestDataReader.getTestData(TESTDATA_MAIL_CONTENT));    
     }
     
     @Override
-    public Mail sentWithEmptyContent() {
-      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL_SENT_TO),
-      			TestDataReader.getTestData(TESTDATA_MAIL_SENT_SUBJECT), "");
+    public Mail withEmptyContent() {
+      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL),
+      			TestDataReader.getTestData(TESTDATA_MAIL_TO),
+      			TestDataReader.getTestData(TESTDATA_MAIL_SUBJECT), "");    
     }
     
     @Override
-    public Mail sentWithEmptySubjectAndEmptyContent() {
-      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL_SENT_TO), "", "");
-    }
-    
-    @Override
-    public Mail receivedWithAllCredentials() {
-      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL_RECEIVED_FROM),
-      			TestDataReader.getTestData(TESTDATA_MAIL_RECEIVED_SUBJECT),
-      			TestDataReader.getTestData(TESTDATA_MAIL_RECEIVED_CONTENT));
-    }
-    
-    @Override
-    public Mail receivedWithEmptySubject() {
-      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL_RECEIVED_FROM), "",
-      			TestDataReader.getTestData(TESTDATA_MAIL_RECEIVED_CONTENT));    
-    }
-    
-    @Override   
-    public Mail receivedWithEmptyContent() {
-      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL_RECEIVED_FROM),
-      			TestDataReader.getTestData(TESTDATA_MAIL_RECEIVED_SUBJECT), "");    
-    }
-    
-    @Override
-    public Mail receivedWithEmptySubjectAndEmptyContent() {
-      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL_RECEIVED_FROM), "", "");
+    public Mail withEmptySubjectAndEmptyContent() {
+      return new Mail(TestDataReader.getTestData(TESTDATA_MAIL),
+      			TestDataReader.getTestData(TESTDATA_MAIL_TO), "", "");    
     }
 }

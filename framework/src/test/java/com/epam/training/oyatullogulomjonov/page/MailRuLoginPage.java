@@ -7,9 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import java.time.Duration;
 
 public class MailRuLoginPage extends AbstractPage {    
     private final String PAGE_URL = "https://account.mail.ru";
@@ -41,37 +38,35 @@ public class MailRuLoginPage extends AbstractPage {
     }
         
     public MailRuLoginPage enterEmail(String email) {
-      WebElement accountTextBox = new WebDriverWait(driver,Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.elementToBeClickable(accountTextBoxBy));
-      accountTextBox.sendKeys(email);
-      enterPasswordButton.click();
+      driverWaitForElementToBeClickable(accountTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(email);
       return this;
     }
     
-    public MailRuMailPage enterPassword(String password) {
-      WebElement passwordTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.elementToBeClickable(passwordTextBoxBy));
-      passwordTextBox.sendKeys(password);
+    public MailRuLoginPage clickEnterPasswordButton() {
+      enterPasswordButton.click();
+      return this;      
+    }
+    
+    public MailRuLoginPage enterPassword(String password) {
+      driverWaitForElementToBeClickable(passwordTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(password);
+      return this;
+    }
+    
+    public MailRuMailPage clickSignInButton() {
       signInButton.click();
       logger.info("Login performed");
-      return new MailRuMailPage(driver);
+      return new MailRuMailPage(driver);    
     }
 
     public boolean isAccountNotRegistered() {
-      WebElement accountNotRegisteredTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.presenceOfElementLocated(accountNotRegisteredTextBoxBy));
-      return accountNotRegisteredTextBox.isDisplayed();
+      return driverWaitForPresenceOfElementLocated(accountNotRegisteredTextBoxBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }    
     
     public boolean isPasswordWrong() {
-      WebElement wrongPasswordTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.presenceOfElementLocated(wrongPasswordTextBoxBy));
-      return wrongPasswordTextBox.isDisplayed();
+      return driverWaitForPresenceOfElementLocated(wrongPasswordTextBoxBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }    
     
     public boolean isAccountEmpty() {
-      WebElement accountEmptyTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.presenceOfElementLocated(accountEmptyTextBoxBy));
-      return accountEmptyTextBox.isDisplayed();
+      return driverWaitForPresenceOfElementLocated(accountEmptyTextBoxBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }
 }

@@ -1,11 +1,8 @@
 package com.epam.training.oyatullogulomjonov.test;
 
 import com.epam.training.oyatullogulomjonov.model.User;
-import com.epam.training.oyatullogulomjonov.model.Mail;
 import com.epam.training.oyatullogulomjonov.service.UserCreator;
 import com.epam.training.oyatullogulomjonov.service.MailRuUserCreator;
-import com.epam.training.oyatullogulomjonov.service.MailCreator;
-import com.epam.training.oyatullogulomjonov.service.MailRuMailCreator;
 import com.epam.training.oyatullogulomjonov.page.MailRuLoginPage;
 import com.epam.training.oyatullogulomjonov.page.MailRuMailPage;
 import org.testng.annotations.Test;
@@ -13,77 +10,61 @@ import org.testng.Assert;
 
 public class MailRuTest extends CommonConditions {
     UserCreator mailRuUserCreator = UserCreator.getCreator("MailRu");
-    MailCreator mailRuMailCreator = MailCreator.getCreator("MailRu");
         
-    @Test
+    @Test(description = "Login with valid email and password and check that MailRu page is opened")
     public void loginWithValidEmailAndValidPassword() {
       User user = mailRuUserCreator.withValidCredentials();
       MailRuMailPage mailPage = new MailRuLoginPage(driver)
       			.openPage()
       			.enterEmail(user.getEmail())
-      			.enterPassword(user.getPassword());      
-      Assert.assertTrue(mailPage.isPageOpen());
+      			.clickEnterPasswordButton()
+      			.enterPassword(user.getPassword())
+      			.clickSignInButton();
+      Assert.assertTrue(mailPage.isPageOpen(), "Login is unsucessful and MailPage is not opened");
+      mailPage.logOut();
     }
     
-    @Test
+    @Test(description = "Login with wrong password and check that the password is not accepted")
     public void loginWithValidEmailAndWrongPassword() { 
       User user = mailRuUserCreator.withWrongPassword();    
       MailRuLoginPage loginPage = new MailRuLoginPage(driver).openPage();
       MailRuMailPage mailPage = loginPage
       			.enterEmail(user.getEmail())
-      			.enterPassword(user.getPassword());
-      Assert.assertTrue(loginPage.isPasswordWrong());
+      			.clickEnterPasswordButton()
+      			.enterPassword(user.getPassword())
+      			.clickSignInButton();
+      Assert.assertTrue(loginPage.isPasswordWrong(), "Wrong password is accepted as valid");
     }
 
-    @Test
+    @Test(description = "Login with wrong email and check that the email is not accepted")
     public void loginWithWrongEmail() {
       User user = mailRuUserCreator.withWrongEmail();
       MailRuLoginPage loginPage = new MailRuLoginPage(driver)
       			.openPage()
-      			.enterEmail(user.getEmail());
-      Assert.assertTrue(loginPage.isAccountNotRegistered());            
+      			.enterEmail(user.getEmail())
+      			.clickEnterPasswordButton();
+      Assert.assertTrue(loginPage.isAccountNotRegistered(), "Wrong email is accepted as valid");
     }
         
-    @Test
+    @Test(description = "Login with empty input for email and check that it is not accepted")
     public void loginWithEmptyAccount() {
       User user = mailRuUserCreator.withEmptyEmail();
       MailRuLoginPage loginPage = new MailRuLoginPage(driver)
       			.openPage()
-      			.enterEmail(user.getEmail());
-      Assert.assertTrue(loginPage.isAccountEmpty());
+      			.enterEmail(user.getEmail())
+      			.clickEnterPasswordButton();
+      Assert.assertTrue(loginPage.isAccountEmpty(), "Empty account username is not ignored");
     }
 
-    @Test
+    @Test(description = "Login with empty input for password and check that it is not accepted")
     public void loginWithValidEmailAndEmptyPassword() {
       User user = mailRuUserCreator.withEmptyPassword();
       MailRuLoginPage loginPage = new MailRuLoginPage(driver).openPage();
       MailRuMailPage mailPage = loginPage
       			.enterEmail(user.getEmail())
-      			.enterPassword(user.getPassword());
-      Assert.assertTrue(loginPage.isPasswordWrong());
-    }
-
-    @Test
-    public void sendNewMail() {
-      User user = mailRuUserCreator.withValidCredentials();
-      Mail mail = mailRuMailCreator.sentWithAllCredentials();
-      MailRuMailPage mailPage = new MailRuLoginPage(driver)
-      			.openPage()
-      			.enterEmail(user.getEmail())
-      			.enterPassword(user.getPassword());      			
-      mailPage.sendNewMail(mail);
-      Assert.assertTrue(mailPage.isMailSent());
-    }    
-    
-    @Test
-    public void isMailReceived() {
-      User user = mailRuUserCreator.withValidCredentials();
-      Mail expectedMail = mailRuMailCreator.receivedWithAllCredentials();
-      MailRuMailPage mailPage = new MailRuLoginPage(driver)
-      			.openPage()
-      			.enterEmail(user.getEmail())
-      			.enterPassword(user.getPassword());
-      Mail receivedMail = mailPage.checkMail(expectedMail.getSubject()); 
-      Assert.assertTrue(receivedMail.equals(expectedMail));
+      			.clickEnterPasswordButton()
+      			.enterPassword(user.getPassword())
+      			.clickSignInButton();
+      Assert.assertTrue(loginPage.isPasswordWrong(), "Empty password is accepted as valid");
     }
 }

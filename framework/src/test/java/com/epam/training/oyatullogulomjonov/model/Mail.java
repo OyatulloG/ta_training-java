@@ -3,22 +3,32 @@ package com.epam.training.oyatullogulomjonov.model;
 import java.util.Objects;
 
 public class Mail {
-    private String email;
+    private String mailFrom;
+    private String mailTo;
     private String subject;
     private String content;
 
-    public Mail(String email, String subject, String content){
-      this.email = email;
+    public Mail(String mailFrom, String mailTo, String subject, String content){
+      this.mailFrom = mailFrom;
+      this.mailTo = mailTo;
       this.subject = subject;
       this.content = content;
     }
 
-    public String getEmail(){
-      return email;
+    public String getMailFrom(){
+      return mailFrom;
+    }
+
+    public void setMailFrom(String mailFrom){
+      this.mailFrom = mailFrom;
     }
     
-    public void setEmail(String email){
-      this.email = email;
+    public String getMailTo(){
+      return mailTo;
+    }
+
+    public void setMailTo(String mailTo){
+      this.mailTo = mailTo;
     }
     
     public String getSubject(){
@@ -40,7 +50,8 @@ public class Mail {
     @Override
     public String toString(){
       return "Mail{" + 
-      		"email='" + email + "'" + 
+      		"mailFrom='" + mailFrom + "'" +
+      		"mailTo='" + mailTo + "'" +       		 
       		"subject='" + subject + "'" + 
       		"content='" + content + "'" + 
       		"}";
@@ -55,13 +66,14 @@ public class Mail {
         return false;
       }      
       Mail mail = (Mail) o;
-      return Objects.equals(getEmail(), mail.getEmail()) &&
+      return Objects.equals(getMailFrom(), mail.getMailFrom()) &&
+      		Objects.equals(getMailTo(), mail.getMailTo()) &&
       		Objects.equals(getSubject(), mail.getSubject()) &&
       		Objects.equals(getContent(), mail.getContent());      
     }   
     
     @Override
     public int hashCode(){
-      return Objects.hash(getEmail(), getSubject(), getContent());
+      return Objects.hash(getMailFrom(), getMailTo(), getSubject(), getContent());
     }
 }

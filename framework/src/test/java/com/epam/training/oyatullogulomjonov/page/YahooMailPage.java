@@ -9,17 +9,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
-import java.time.Duration;
 
 public class YahooMailPage extends AbstractPage {   
     private final Logger logger = LogManager.getRootLogger();
+    private final String YAHOOMAIL = "sampleonesample@yahoo.com";
     
     @FindBy(xpath = "//*[@data-test-id='compose-button']")
     private WebElement composeButton;
-
+    
+    @FindBy(id = "ybarAccountProfile")
+    private WebElement accountProfileButton;
+    
+    private By profileSignOutButtonBy = By.id("profile-signout-link");
     private By mailToTextBoxBy = By.id("message-to-field");
 
     @FindBy(xpath = "//*[@data-test-id='compose-subject']")
@@ -44,15 +46,17 @@ public class YahooMailPage extends AbstractPage {
     }
     
     public boolean isPageOpen() {      
-      WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
-      return (null != wait.until(ExpectedConditions.visibilityOf(composeButton))) ? true : false;
+      return driverWaitForVisibilityOf(composeButton, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }
+
+    public void logOut() {
+      accountProfileButton.click();
+      driverWaitForElementToBeClickable(profileSignOutButtonBy, WAIT_TIMEOUT_SECONDS).click();
+    }   
 
     public YahooMailPage sendNewMail(Mail mail) {
       composeButton.click();
-      WebElement mailToTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.elementToBeClickable(mailToTextBoxBy));
-      mailToTextBox.sendKeys(mail.getEmail());
+      driverWaitForElementToBeClickable(mailToTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(mail.getMailTo());
       mailSubjectTextBox.sendKeys(mail.getSubject());
       mailContentTextBox.sendKeys(mail.getContent());
       sendMailButton.click();
@@ -61,33 +65,29 @@ public class YahooMailPage extends AbstractPage {
     }
     
     public boolean isMailSent() {
-      WebElement mailSentMessageTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.presenceOfElementLocated(mailSentMessageTextBoxBy));
-      return (mailSentMessageTextBox != null) ? true : false;
+      return driverWaitForPresenceOfElementLocated(mailSentMessageTextBoxBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }
     
-    public Mail checkMail(String subjectOfMail) {
-      WebElement mail = isMailReceived(subjectOfMail);
-      if (mail == null) {
-        return null;		
-      }            
-      mail.click();      
+    public Mail getMailWithSubject(String subjectOfMail) {
+      if (!isUnreadMailWithSubjectClicked(subjectOfMail)) {
+	return null;
+      }      
       
-      WebElement unreadMailFromTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.presenceOfElementLocated(unreadMailFromTextBoxBy));
+      WebElement unreadMailFromTextBox = driverWaitForPresenceOfElementLocated(unreadMailFromTextBoxBy, WAIT_TIMEOUT_SECONDS);
       String mailEmail = StringUtils.extractEmailForYahoo(unreadMailFromTextBox.getText());
       String mailContent = StringUtils.extractMailContentForYahoo(unreadMailContentTextBox.getText());
-      return new Mail(mailEmail, subjectOfMail, mailContent);
+      return new Mail(mailEmail, YAHOOMAIL, subjectOfMail, mailContent);
     }
     
-    private WebElement isMailReceived(String subjectOfMail) {
+    private boolean isUnreadMailWithSubjectClicked(String subjectOfMail) {
       List<WebElement> unreadMails = getUnreadMails();
       for (WebElement unreadMail : unreadMails) {
         if (unreadMail.getAttribute("aria-label").contains(subjectOfMail)) {
-          return unreadMail;
+          unreadMail.click();
+          return true;
         }
       }
-      return null;      
+      return false;
     }
     
     private List<WebElement> getUnreadMails() {

@@ -3,13 +3,10 @@ package com.epam.training.oyatullogulomjonov.service;
 import com.epam.training.oyatullogulomjonov.model.Mail;
 
 public abstract class MailCreator {
-    public String TESTDATA_MAIL_SENT_TO;
-    public String TESTDATA_MAIL_SENT_SUBJECT;
-    public String TESTDATA_MAIL_SENT_CONTENT;
-    public String TESTDATA_MAIL_RECEIVED_FROM;
-    public String TESTDATA_MAIL_RECEIVED_SUBJECT;
-    public String TESTDATA_MAIL_RECEIVED_CONTENT;
-
+    public String TESTDATA_MAIL;    
+    public String TESTDATA_MAIL_TO;
+    public String TESTDATA_MAIL_SUBJECT;
+    public String TESTDATA_MAIL_CONTENT;   
     
     public static MailCreator getCreator(String mailProvider){
       if (mailProvider.equalsIgnoreCase("MailRu")){
@@ -21,12 +18,8 @@ public abstract class MailCreator {
       }
     }
     
-    public abstract Mail sentWithAllCredentials();
-    public abstract Mail sentWithEmptySubject();
-    public abstract Mail sentWithEmptyContent();
-    public abstract Mail sentWithEmptySubjectAndEmptyContent();    
-    public abstract Mail receivedWithAllCredentials();
-    public abstract Mail receivedWithEmptySubject();
-    public abstract Mail receivedWithEmptyContent();
-    public abstract Mail receivedWithEmptySubjectAndEmptyContent();        
+    public abstract Mail withAllCredentials();
+    public abstract Mail withEmptySubject();    
+    public abstract Mail withEmptyContent();
+    public abstract Mail withEmptySubjectAndEmptyContent();    
 }

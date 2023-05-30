@@ -8,15 +8,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import java.time.Duration;
 import java.util.List;
 
 public class MailRuMailPage extends AbstractPage {    
     private final Logger logger = LogManager.getRootLogger();
+    private final String MAILRU = "sampletwosample@mail.ru";
 
     private By composeButtonBy = By.xpath("//*[@href='/compose/']");
+    private By accountButtonBy = By.xpath("//*[@data-testid='whiteline-account']");    
+    private By accountLogoutButtonBy = By.xpath("//*[@data-testid='whiteline-account-exit']");    
     private By mailToTextBoxBy = By.xpath("//*[@data-type='to']//input");
 
     @FindBy(name = "Subject")
@@ -24,9 +24,10 @@ public class MailRuMailPage extends AbstractPage {
     
     @FindBy(xpath = "//*[@role='textbox']//div")
     private WebElement mailContentTextBox;
-    
+        
     private By sendMailButtonBy = By.xpath("//*[@data-test-id='send']");
     private By mailSentMessageTextBoxBy = By.className("layer-sent-page");  
+    private By mailSentMessageCloseButtonBy = By.xpath("//*[@class='layer-sent-page']//span");
     private By unreadMailBy = By.xpath("//*[contains(@class, 'subject_unread')]");
     private By unreadMailFromTextBoxBy = By.xpath("//*[@class='letter__author']//*[contains(@class,'letter-contact')]");
             
@@ -39,60 +40,56 @@ public class MailRuMailPage extends AbstractPage {
     }
     
     public boolean isPageOpen() {
-      WebElement composeButton = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.presenceOfElementLocated(composeButtonBy));
-      return (composeButton != null) ? true : false;
+      return driverWaitForPresenceOfElementLocated(composeButtonBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
+    }
+
+    public void logOut() {
+      driverWaitForElementToBeClickable(accountButtonBy, WAIT_TIMEOUT_SECONDS).click();
+      driverWaitForElementToBeClickable(accountLogoutButtonBy, WAIT_TIMEOUT_SECONDS).click();
     }
 
     public MailRuMailPage sendNewMail(Mail mail) {
-      WebElement composeButton = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.elementToBeClickable(composeButtonBy));
-      composeButton.click();            
-      WebElement mailToTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.elementToBeClickable(mailToTextBoxBy));
-      mailToTextBox.sendKeys(mail.getEmail());	
+      driverWaitForElementToBeClickable(composeButtonBy, WAIT_TIMEOUT_SECONDS).click();
+      driverWaitForElementToBeClickable(mailToTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(mail.getMailTo());
       mailSubjectTextBox.sendKeys(mail.getSubject());
       mailContentTextBox.sendKeys(mail.getContent());
-      WebElement sendMailButton = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.elementToBeClickable(sendMailButtonBy));      
-      sendMailButton.click();
+      driverWaitForElementToBeClickable(sendMailButtonBy, WAIT_TIMEOUT_SECONDS).click();
       logger.info("New Mail is sent");
       return this;
     }
     
     public boolean isMailSent() {
-      WebElement mailSentMessageTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.presenceOfElementLocated(mailSentMessageTextBoxBy));
-      return (mailSentMessageTextBox != null) ? true : false;
+      return driverWaitForPresenceOfElementLocated(mailSentMessageTextBoxBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }
     
-    public Mail checkMail(String subjectOfMail) {
-      WebElement mail = isMailReceived(subjectOfMail);
-      if (mail == null) {
-	return null;
+    public void clickMailSentMessageCloseButton() {
+      driverWaitForElementToBeClickable(mailSentMessageCloseButtonBy, WAIT_TIMEOUT_SECONDS).click();
+    }
+    
+    public Mail getMailWithSubject(String subjectOfMail) {
+      if (!isUnreadMailWithSubjectClicked(subjectOfMail)) {
+        return null;
       }      
-      mail.click();      
 
-      WebElement unreadMailFromTextBox = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS))
-      		.until(ExpectedConditions.presenceOfElementLocated(unreadMailFromTextBoxBy));
+      WebElement unreadMailFromTextBox = driverWaitForPresenceOfElementLocated(unreadMailFromTextBoxBy, WAIT_TIMEOUT_SECONDS);
       String mailFrom = unreadMailFromTextBox.getAttribute("title");
       String mailContent = unreadMailContentTextBox.getText();      
-      return new Mail(mailFrom, subjectOfMail, mailContent);      
+      return new Mail(mailFrom, MAILRU, subjectOfMail, mailContent);      
     }
         
-    private WebElement isMailReceived(String subjectOfMail) {
+    private boolean isUnreadMailWithSubjectClicked(String subjectOfMail) {
       List<WebElement> unreadMails = getUnreadMails();
       for (WebElement unreadMail : unreadMails) {
         if (unreadMail.getText().equals(subjectOfMail)) {
-          return unreadMail;
+          unreadMail.click();
+          return true;
         }
       }
-      return null;
+      return false;
     }
     
     private List<WebElement> getUnreadMails() {
-      WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAIT_TIMEOUT_SECONDS));
-      wait.until(ExpectedConditions.presenceOfElementLocated(unreadMailBy));
+      driverWaitForPresenceOfElementLocated(unreadMailBy, WAIT_TIMEOUT_SECONDS);
       return driver.findElements(unreadMailBy);
     }
 }

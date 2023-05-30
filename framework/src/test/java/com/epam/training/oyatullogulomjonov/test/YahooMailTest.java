@@ -1,11 +1,8 @@
 package com.epam.training.oyatullogulomjonov.test;
 
 import com.epam.training.oyatullogulomjonov.model.User;
-import com.epam.training.oyatullogulomjonov.model.Mail;
 import com.epam.training.oyatullogulomjonov.service.UserCreator;
 import com.epam.training.oyatullogulomjonov.service.YahooUserCreator;
-import com.epam.training.oyatullogulomjonov.service.MailCreator;
-import com.epam.training.oyatullogulomjonov.service.YahooMailCreator;
 import com.epam.training.oyatullogulomjonov.page.YahooHomePage;
 import com.epam.training.oyatullogulomjonov.page.YahooLoginPage;
 import com.epam.training.oyatullogulomjonov.page.YahooMailPage;
@@ -14,80 +11,63 @@ import org.testng.Assert;
 
 public class YahooMailTest extends CommonConditions {
     UserCreator yahooUserCreator = UserCreator.getCreator("Yahoo");
-    MailCreator yahooMailCreator = MailCreator.getCreator("Yahoo");
     
-    @Test
+    @Test(description = "Login with valid email and password and check that Yahoo Mail page is opened")
     public void loginWithValidEmailAndValidPassword() {
       User user = yahooUserCreator.withValidCredentials();
       YahooMailPage mailPage = new YahooLoginPage(driver)
       			.openPage()
       			.enterEmail(user.getEmail())
+      			.clickNextButton()
       			.enterPassword(user.getPassword())
+      			.clickSignInButton()
       			.switchToMailPage();
-      Assert.assertTrue(mailPage.isPageOpen());
+      Assert.assertTrue(mailPage.isPageOpen(), "Login is unsucessful and MailPage is not opened");
+      mailPage.logOut();
+      new YahooLoginPage(driver).openPage().removeAccount();
     }
     
-    @Test
+    @Test(description = "Login with wrong password and check that the password is not accepted")
     public void loginWithValidEmailAndWrongPassword() {
       User user = yahooUserCreator.withWrongPassword();    
       YahooLoginPage loginPage = new YahooLoginPage(driver)
       			.openPage()
-      			.enterEmail(user.getEmail());
-      YahooHomePage homePage = loginPage.enterPassword(user.getPassword());
-      Assert.assertTrue(loginPage.isPasswordWrong());
+      			.enterEmail(user.getEmail())
+      			.clickNextButton()
+      			.enterPassword(user.getPassword());
+      YahooHomePage homePage = loginPage.clickSignInButton();
+      Assert.assertTrue(loginPage.isPasswordWrong(), "Wrong password is accepted as valid");
     }
     
-    @Test
+    @Test(description = "Login with wrong email and check that the email is not accepted")
     public void loginWithWrongEmail() {
       User user = yahooUserCreator.withWrongEmail();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
       			.openPage()
-      			.enterEmail(user.getEmail());
-      Assert.assertTrue(loginPage.isEmailNotRegistered());
+      			.enterEmail(user.getEmail())
+      			.clickNextButton();
+      Assert.assertTrue(loginPage.isEmailNotRegistered(), "Wrong email is accepted as valid");
     }
        
-    @Test
+    @Test(description = "Login with empty input for email and check that it is not accepted")
     public void loginWithEmptyAccount() {
       User user = yahooUserCreator.withEmptyEmail();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
       			.openPage()
-      			.enterEmail(user.getEmail());
-      Assert.assertTrue(loginPage.isEmailNotRegistered());
+      			.enterEmail(user.getEmail())
+      			.clickNextButton();
+      Assert.assertTrue(loginPage.isEmailNotRegistered(), "Empty account username is not ignored");
     }
     
-    @Test
+    @Test(description = "Login with empty input for password and check that it is not accepted")
     public void loginWithValidEmailAndEmptyPassword() {
       User user = yahooUserCreator.withEmptyPassword();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
       			.openPage()
-      			.enterEmail(user.getEmail());
-      YahooHomePage homePage = loginPage.enterPassword(user.getPassword());
-      Assert.assertTrue(loginPage.isPasswordWrong());
-    }
-    
-    @Test
-    public void sendNewMail() {
-      User user = yahooUserCreator.withValidCredentials();
-      Mail mail = yahooMailCreator.sentWithAllCredentials();
-      YahooMailPage mailPage = new YahooLoginPage(driver)
-      			.openPage()
       			.enterEmail(user.getEmail())
-      			.enterPassword(user.getPassword())
-      			.switchToMailPage()
-      			.sendNewMail(mail);
-      Assert.assertTrue(mailPage.isMailSent());
-    }    
-        
-    @Test
-    public void isMailReceived() {
-      User user = yahooUserCreator.withValidCredentials();
-      Mail expectedMail = yahooMailCreator.receivedWithAllCredentials();
-      YahooMailPage mailPage = new YahooLoginPage(driver)
-      			.openPage()
-      			.enterEmail(user.getEmail())
-      			.enterPassword(user.getPassword())
-      			.switchToMailPage();      
-      Mail receivedMail = mailPage.checkMail(expectedMail.getSubject());
-      Assert.assertTrue(receivedMail.equals(expectedMail));
-    }        
+      			.clickNextButton()
+      			.enterPassword(user.getPassword());
+      YahooHomePage homePage = loginPage.clickSignInButton();
+      Assert.assertTrue(loginPage.isPasswordWrong(), "Empty password is accepted as valid");
+    }   
 }
