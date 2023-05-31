@@ -15,7 +15,6 @@ public class MailRuTest extends CommonConditions {
     public void loginWithValidEmailAndValidPassword() {
       User user = mailRuUserCreator.withValidCredentials();
       MailRuMailPage mailPage = new MailRuLoginPage(driver)
-      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickEnterPasswordButton()
       			.enterPassword(user.getPassword())
@@ -27,7 +26,7 @@ public class MailRuTest extends CommonConditions {
     @Test(description = "Login with wrong password and check that the password is not accepted")
     public void loginWithValidEmailAndWrongPassword() { 
       User user = mailRuUserCreator.withWrongPassword();    
-      MailRuLoginPage loginPage = new MailRuLoginPage(driver).openPage();
+      MailRuLoginPage loginPage = new MailRuLoginPage(driver);
       MailRuMailPage mailPage = loginPage
       			.enterEmail(user.getEmail())
       			.clickEnterPasswordButton()
@@ -40,7 +39,6 @@ public class MailRuTest extends CommonConditions {
     public void loginWithWrongEmail() {
       User user = mailRuUserCreator.withWrongEmail();
       MailRuLoginPage loginPage = new MailRuLoginPage(driver)
-      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickEnterPasswordButton();
       Assert.assertTrue(loginPage.isAccountNotRegistered(), "Wrong email is accepted as valid");
@@ -50,7 +48,6 @@ public class MailRuTest extends CommonConditions {
     public void loginWithEmptyAccount() {
       User user = mailRuUserCreator.withEmptyEmail();
       MailRuLoginPage loginPage = new MailRuLoginPage(driver)
-      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickEnterPasswordButton();
       Assert.assertTrue(loginPage.isAccountEmpty(), "Empty account username is not ignored");
@@ -59,7 +56,7 @@ public class MailRuTest extends CommonConditions {
     @Test(description = "Login with empty input for password and check that it is not accepted")
     public void loginWithValidEmailAndEmptyPassword() {
       User user = mailRuUserCreator.withEmptyPassword();
-      MailRuLoginPage loginPage = new MailRuLoginPage(driver).openPage();
+      MailRuLoginPage loginPage = new MailRuLoginPage(driver);
       MailRuMailPage mailPage = loginPage
       			.enterEmail(user.getEmail())
       			.clickEnterPasswordButton()

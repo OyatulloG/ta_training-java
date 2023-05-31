@@ -16,7 +16,6 @@ public class YahooMailTest extends CommonConditions {
     public void loginWithValidEmailAndValidPassword() {
       User user = yahooUserCreator.withValidCredentials();
       YahooMailPage mailPage = new YahooLoginPage(driver)
-      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickNextButton()
       			.enterPassword(user.getPassword())
@@ -24,14 +23,13 @@ public class YahooMailTest extends CommonConditions {
       			.switchToMailPage();
       Assert.assertTrue(mailPage.isPageOpen(), "Login is unsucessful and MailPage is not opened");
       mailPage.logOut();
-      new YahooLoginPage(driver).openPage().removeAccount();
+      new YahooLoginPage(driver).removeAccount();
     }
     
     @Test(description = "Login with wrong password and check that the password is not accepted")
     public void loginWithValidEmailAndWrongPassword() {
       User user = yahooUserCreator.withWrongPassword();    
       YahooLoginPage loginPage = new YahooLoginPage(driver)
-      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickNextButton()
       			.enterPassword(user.getPassword());
@@ -43,7 +41,6 @@ public class YahooMailTest extends CommonConditions {
     public void loginWithWrongEmail() {
       User user = yahooUserCreator.withWrongEmail();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
-      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickNextButton();
       Assert.assertTrue(loginPage.isEmailNotRegistered(), "Wrong email is accepted as valid");
@@ -53,7 +50,6 @@ public class YahooMailTest extends CommonConditions {
     public void loginWithEmptyAccount() {
       User user = yahooUserCreator.withEmptyEmail();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
-      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickNextButton();
       Assert.assertTrue(loginPage.isEmailNotRegistered(), "Empty account username is not ignored");
@@ -63,7 +59,6 @@ public class YahooMailTest extends CommonConditions {
     public void loginWithValidEmailAndEmptyPassword() {
       User user = yahooUserCreator.withEmptyPassword();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
-      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickNextButton()
       			.enterPassword(user.getPassword());

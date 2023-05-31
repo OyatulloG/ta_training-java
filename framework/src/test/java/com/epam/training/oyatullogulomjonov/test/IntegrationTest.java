@@ -26,7 +26,6 @@ public class IntegrationTest extends CommonConditions {
     @Test(description = "Send mail from Yahoo to MailRu, check that mail is sent and received")
     public void verifyMailSentFromYahooToMailRu() {
         YahooMailPage yahooMailPage = new YahooLoginPage(driver)
-        			.openPage()
       				.enterEmail(yahooUser.getEmail())
       				.clickNextButton()
 	      			.enterPassword(yahooUser.getPassword())
@@ -34,11 +33,10 @@ public class IntegrationTest extends CommonConditions {
       				.switchToMailPage()
       				.sendNewMail(yahooMail);
       	Assert.assertTrue(yahooMailPage.isMailSent(), "Mail is not sent");
-	yahooMailPage.logOut();
-	new YahooLoginPage(driver).openPage().removeAccount();      	
+	yahooMailPage.logOut();      	
+	new YahooLoginPage(driver).removeAccount();      	
       	
       	MailRuMailPage mailRuMailPage = new MailRuLoginPage(driver)
-      	                       .openPage()
       	                       .enterEmail(mailRuUser.getEmail())
       	                       .clickEnterPasswordButton()
       	                       .enterPassword(mailRuUser.getPassword())
@@ -51,7 +49,6 @@ public class IntegrationTest extends CommonConditions {
     @Test(description = "Send mail from MailRu to Yahoo, check that mail is sent and received")
     public void verifyMailSentFromMailRuToYahoo() {
     	MailRuMailPage mailRuMailPage = new MailRuLoginPage(driver)
-    				.openPage()
     				.enterEmail(mailRuUser.getEmail())
     				.clickEnterPasswordButton()
     				.enterPassword(mailRuUser.getPassword())
@@ -62,7 +59,6 @@ public class IntegrationTest extends CommonConditions {
 	mailRuMailPage.logOut();    	
     	
     	YahooMailPage yahooMailPage = new YahooLoginPage(driver)
-      				.openPage()
 	      			.enterEmail(yahooUser.getEmail())
 	      			.clickNextButton()
       				.enterPassword(yahooUser.getPassword())
@@ -70,7 +66,7 @@ public class IntegrationTest extends CommonConditions {
       				.switchToMailPage();      
       	Mail receivedMail = yahooMailPage.getMailWithSubject(mailRuMail.getSubject());
       	Assert.assertTrue(receivedMail.equals(mailRuMail), "Received and sent mails are not the same");    	
-	yahooMailPage.logOut();
-	new YahooLoginPage(driver).openPage().removeAccount();      	      	
+	yahooMailPage.logOut();      	      	
+	new YahooLoginPage(driver).removeAccount();
     }   
 }
