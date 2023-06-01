@@ -1,7 +1,6 @@
 package com.epam.training.oyatullogulomjonov.test;
 
 import com.epam.training.oyatullogulomjonov.model.User;
-import com.epam.training.oyatullogulomjonov.service.UserCreator;
 import com.epam.training.oyatullogulomjonov.service.YahooUserCreator;
 import com.epam.training.oyatullogulomjonov.page.YahooHomePage;
 import com.epam.training.oyatullogulomjonov.page.YahooLoginPage;
@@ -10,11 +9,9 @@ import org.testng.annotations.Test;
 import org.testng.Assert;
 
 public class YahooMailTest extends CommonConditions {
-    UserCreator yahooUserCreator = UserCreator.getCreator("Yahoo");
-    
-    @Test(description = "Login with valid email and password and check that Yahoo Mail page is opened")
+    @Test(description = "Login with valid email and password and check that Yahoo Mail page is opened", groups = {"yahooLogOut"})
     public void loginWithValidEmailAndValidPassword() {
-      User user = yahooUserCreator.withValidCredentials();
+      User user = new YahooUserCreator().withValidCredentials();
       YahooMailPage mailPage = new YahooLoginPage(driver)
       			.enterEmail(user.getEmail())
       			.clickNextButton()
@@ -22,13 +19,11 @@ public class YahooMailTest extends CommonConditions {
       			.clickSignInButton()
       			.switchToMailPage();
       Assert.assertTrue(mailPage.isPageOpen(), "Login is unsucessful and MailPage is not opened");
-      mailPage.logOut();
-      new YahooLoginPage(driver).removeAccount();
     }
     
     @Test(description = "Login with wrong password and check that the password is not accepted")
     public void loginWithValidEmailAndWrongPassword() {
-      User user = yahooUserCreator.withWrongPassword();    
+      User user = new YahooUserCreator().withWrongPassword();    
       YahooLoginPage loginPage = new YahooLoginPage(driver)
       			.enterEmail(user.getEmail())
       			.clickNextButton()
@@ -39,7 +34,7 @@ public class YahooMailTest extends CommonConditions {
     
     @Test(description = "Login with wrong email and check that the email is not accepted")
     public void loginWithWrongEmail() {
-      User user = yahooUserCreator.withWrongEmail();
+      User user = new YahooUserCreator().withWrongEmail();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
       			.enterEmail(user.getEmail())
       			.clickNextButton();
@@ -48,7 +43,7 @@ public class YahooMailTest extends CommonConditions {
        
     @Test(description = "Login with empty input for email and check that it is not accepted")
     public void loginWithEmptyAccount() {
-      User user = yahooUserCreator.withEmptyEmail();
+      User user = new YahooUserCreator().withEmptyEmail();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
       			.enterEmail(user.getEmail())
       			.clickNextButton();
@@ -57,7 +52,7 @@ public class YahooMailTest extends CommonConditions {
     
     @Test(description = "Login with empty input for password and check that it is not accepted")
     public void loginWithValidEmailAndEmptyPassword() {
-      User user = yahooUserCreator.withEmptyPassword();
+      User user = new YahooUserCreator().withEmptyPassword();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
       			.enterEmail(user.getEmail())
       			.clickNextButton()

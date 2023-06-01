@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MailRuMailPage extends AbstractPage {    
     private final Logger logger = LogManager.getRootLogger();
-    private final String MAILRU = "sampletwosample@mail.ru";
+    public final String MAILRU = "sampletwosample@mail.ru";
 
     private By composeButtonBy = By.xpath("//*[@href='/compose/']");
     private By accountButtonBy = By.xpath("//*[@data-testid='whiteline-account']");    
@@ -41,21 +41,34 @@ public class MailRuMailPage extends AbstractPage {
     
     public boolean isPageOpen() {
       return driverWaitForPresenceOfElementLocated(composeButtonBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
+    }    
+	    
+    public void clickAccountButton() {
+      driverWaitForElementToBeClickable(accountButtonBy, WAIT_TIMEOUT_SECONDS).click();      
     }
-
-    public void logOut() {
-      driverWaitForElementToBeClickable(accountButtonBy, WAIT_TIMEOUT_SECONDS).click();
+    
+    public void clickAccountLogoutButton() {
       driverWaitForElementToBeClickable(accountLogoutButtonBy, WAIT_TIMEOUT_SECONDS).click();
     }
-
-    public MailRuMailPage sendNewMail(Mail mail) {
-      driverWaitForElementToBeClickable(composeButtonBy, WAIT_TIMEOUT_SECONDS).click();
-      driverWaitForElementToBeClickable(mailToTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(mail.getMailTo());
-      mailSubjectTextBox.sendKeys(mail.getSubject());
-      mailContentTextBox.sendKeys(mail.getContent());
-      driverWaitForElementToBeClickable(sendMailButtonBy, WAIT_TIMEOUT_SECONDS).click();
-      logger.info("New Mail is sent");
-      return this;
+    
+    public void clickComposeButton() {
+      driverWaitForElementToBeClickable(composeButtonBy, WAIT_TIMEOUT_SECONDS).click();    
+    }
+    
+    public void sendKeysToMailToTextBox(String mailTo) {
+      driverWaitForElementToBeClickable(mailToTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(mailTo);    
+    }
+    
+    public void sendKeysToMailSubjectTextBox(String mailSubject) {
+      mailSubjectTextBox.sendKeys(mailSubject);
+    }
+    
+    public void sendKeysToMailContentTextBox(String mailContent) {
+      mailContentTextBox.sendKeys(mailContent);
+    }
+    
+    public void clickSendMailButton() {
+      driverWaitForElementToBeClickable(sendMailButtonBy, WAIT_TIMEOUT_SECONDS).click();    
     }
     
     public boolean isMailSent() {
@@ -65,29 +78,30 @@ public class MailRuMailPage extends AbstractPage {
     public void clickMailSentMessageCloseButton() {
       driverWaitForElementToBeClickable(mailSentMessageCloseButtonBy, WAIT_TIMEOUT_SECONDS).click();
     }
-    
-    public Mail getMailWithSubject(String subjectOfMail) {
-      if (!isUnreadMailWithSubjectClicked(subjectOfMail)) {
-        return null;
-      }      
-
-      WebElement unreadMailFromTextBox = driverWaitForPresenceOfElementLocated(unreadMailFromTextBoxBy, WAIT_TIMEOUT_SECONDS);
-      String mailFrom = unreadMailFromTextBox.getAttribute("title");
-      String mailContent = unreadMailContentTextBox.getText();      
-      return new Mail(mailFrom, MAILRU, subjectOfMail, mailContent);      
-    }
         
-    private boolean isUnreadMailWithSubjectClicked(String subjectOfMail) {
+    public void clickMail(WebElement mail) {
+      mail.click();
+    }       
+    
+    public String getMailFromText() {
+      WebElement unreadMailFromTextBox = driverWaitForPresenceOfElementLocated(unreadMailFromTextBoxBy, WAIT_TIMEOUT_SECONDS);
+      return unreadMailFromTextBox.getAttribute("title");    
+    }
+    
+    public String getMailContentText() {
+      return unreadMailContentTextBox.getText();     
+    }
+    
+    public WebElement getUnreadMailWithSubject(String subjectOfMail) {
       List<WebElement> unreadMails = getUnreadMails();
       for (WebElement unreadMail : unreadMails) {
         if (unreadMail.getText().equals(subjectOfMail)) {
-          unreadMail.click();
-          return true;
+          return unreadMail;
         }
       }
-      return false;
+      return null;
     }
-    
+        
     private List<WebElement> getUnreadMails() {
       driverWaitForPresenceOfElementLocated(unreadMailBy, WAIT_TIMEOUT_SECONDS);
       return driver.findElements(unreadMailBy);

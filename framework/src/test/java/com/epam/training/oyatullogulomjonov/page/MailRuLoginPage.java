@@ -29,10 +29,9 @@ public class MailRuLoginPage extends AbstractPage {
     public MailRuLoginPage(WebDriver driver) {
       super(driver);
       PageFactory.initElements(this.driver, this);
-      openPage();
     }
     
-    public MailRuLoginPage openPage(){
+    public MailRuLoginPage openPage() {
       driver.navigate().to(PAGE_URL);
       logger.info("MailRu Login page opened");
       return this;

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class YahooMailPage extends AbstractPage {   
     private final Logger logger = LogManager.getRootLogger();
-    private final String YAHOOMAIL = "sampleonesample@yahoo.com";
+    public final String YAHOOMAIL = "sampleonesample@yahoo.com";
     
     @FindBy(xpath = "//*[@data-test-id='compose-button']")
     private WebElement composeButton;
@@ -53,41 +53,52 @@ public class YahooMailPage extends AbstractPage {
       accountProfileButton.click();
       driverWaitForElementToBeClickable(profileSignOutButtonBy, WAIT_TIMEOUT_SECONDS).click();
     }   
-
-    public YahooMailPage sendNewMail(Mail mail) {
+    
+    public void clickComposeButton() {
       composeButton.click();
-      driverWaitForElementToBeClickable(mailToTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(mail.getMailTo());
-      mailSubjectTextBox.sendKeys(mail.getSubject());
-      mailContentTextBox.sendKeys(mail.getContent());
+    }
+    
+    public void sendKeysToMailToTextBox(String mailTo) {
+      driverWaitForElementToBeClickable(mailToTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(mailTo);
+    }
+    
+    public void sendKeysToMailSubjectTextBox(String mailSubject) {
+      mailSubjectTextBox.sendKeys(mailSubject);
+    }
+    
+    public void sendKeysToMailContentTextBox(String mailContent) {
+      mailContentTextBox.sendKeys(mailContent);
+    }
+    
+    public void clickSendMailButton() {
       sendMailButton.click();
-      logger.info("New Mail is sent");
-      return this;
     }
     
     public boolean isMailSent() {
       return driverWaitForPresenceOfElementLocated(mailSentMessageTextBoxBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }
-    
-    public Mail getMailWithSubject(String subjectOfMail) {
-      if (!isUnreadMailWithSubjectClicked(subjectOfMail)) {
-	return null;
-      }      
-      
-      WebElement unreadMailFromTextBox = driverWaitForPresenceOfElementLocated(unreadMailFromTextBoxBy, WAIT_TIMEOUT_SECONDS);
-      String mailEmail = StringUtils.extractEmailForYahoo(unreadMailFromTextBox.getText());
-      String mailContent = StringUtils.extractMailContentForYahoo(unreadMailContentTextBox.getText());
-      return new Mail(mailEmail, YAHOOMAIL, subjectOfMail, mailContent);
+        
+    public void clickMail(WebElement mail) {
+      mail.click();
     }
     
-    private boolean isUnreadMailWithSubjectClicked(String subjectOfMail) {
+    public String getMailFromText() {
+      WebElement unreadMailFromTextBox = driverWaitForPresenceOfElementLocated(unreadMailFromTextBoxBy, WAIT_TIMEOUT_SECONDS);
+      return StringUtils.extractEmailForYahoo(unreadMailFromTextBox.getText());    
+    }        
+    
+    public String getMailContentText() {
+      return StringUtils.extractMailContentForYahoo(unreadMailContentTextBox.getText());
+    }    
+    
+    public WebElement getUnreadMailWithSubject(String subjectOfMail) {
       List<WebElement> unreadMails = getUnreadMails();
       for (WebElement unreadMail : unreadMails) {
         if (unreadMail.getAttribute("aria-label").contains(subjectOfMail)) {
-          unreadMail.click();
-          return true;
+          return unreadMail;
         }
       }
-      return false;
+      return null;
     }
     
     private List<WebElement> getUnreadMails() {

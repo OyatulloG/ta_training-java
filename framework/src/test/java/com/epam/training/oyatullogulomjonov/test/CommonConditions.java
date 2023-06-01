@@ -2,9 +2,15 @@ package com.epam.training.oyatullogulomjonov.test;
 
 import com.epam.training.oyatullogulomjonov.driver.DriverSingleton;
 import com.epam.training.oyatullogulomjonov.util.TestListener;
+import com.epam.training.oyatullogulomjonov.page.MailRuMailPage;
+import com.epam.training.oyatullogulomjonov.page.YahooLoginPage;
+import com.epam.training.oyatullogulomjonov.page.YahooMailPage;
+import com.epam.training.oyatullogulomjonov.service.MailRuService;
+import com.epam.training.oyatullogulomjonov.service.YahooService;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Listeners;
 
 
@@ -20,5 +26,21 @@ public class CommonConditions {
     @AfterClass
     public void stopBrowser() {
       DriverSingleton.closeDriver();
-    }          
+    }
+    
+    @AfterMethod(onlyForGroups = {"closeMailSentMessage"})
+    public void closeMailSentMessage() {
+      new MailRuMailPage(driver).clickMailSentMessageCloseButton();      
+    }
+    
+    @AfterMethod(onlyForGroups = {"mailRuLogOut"})
+    public void logOutFromMailRu() {
+      new MailRuService(driver).logOut();
+    }
+    
+    @AfterMethod(onlyForGroups = {"yahooLogOut"})
+    public void logOutFromYahoo() {
+      new YahooMailPage(driver).logOut();      	      	
+      new YahooLoginPage(driver).removeAccount();    
+    }    
 }

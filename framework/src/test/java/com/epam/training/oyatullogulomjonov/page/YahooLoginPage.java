@@ -32,7 +32,6 @@ public class YahooLoginPage extends AbstractPage {
     public YahooLoginPage(WebDriver driver) {
       super(driver);
       PageFactory.initElements(this.driver, this);
-      openPage();
     }
     
     public YahooLoginPage openPage(){
