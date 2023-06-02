@@ -9,8 +9,6 @@ import com.epam.training.oyatullogulomjonov.model.User;
 import com.epam.training.oyatullogulomjonov.page.MailRuLoginPage;
 import com.epam.training.oyatullogulomjonov.page.MailRuMailPage;
 
-import java.util.Objects;
-
 public class MailRuService {
     private final Logger logger = LogManager.getRootLogger();
     private MailRuLoginPage loginPage;
@@ -31,11 +29,11 @@ public class MailRuService {
     }
             
     public MailRuMailPage sendMail(Mail mail) {
-      mailPage.clickComposeButton();
-      mailPage.sendKeysToMailToTextBox(mail.getMailTo());
-      mailPage.sendKeysToMailSubjectTextBox(mail.getSubject());
-      mailPage.sendKeysToMailContentTextBox(mail.getContent());
-      mailPage.clickSendMailButton();
+      mailPage.clickComposeButton()
+      		.sendKeysToMailToTextBox(mail.getMailTo())
+      		.sendKeysToMailSubjectTextBox(mail.getSubject())
+      		.sendKeysToMailContentTextBox(mail.getContent())
+      		.clickSendMailButton();
       logger.info("New Mail is sent");
       return mailPage;
     }
@@ -53,8 +51,8 @@ public class MailRuService {
       return receivedMail.equals(sentMail);
     }
 
-    public void logOut() {
-      mailPage.clickAccountButton();
-      mailPage.clickAccountLogoutButton();
+    public MailRuLoginPage logOut() {
+      return mailPage.clickAccountButton()
+      			.clickAccountLogoutButton();
     }    
 }

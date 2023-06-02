@@ -1,6 +1,5 @@
 package com.epam.training.oyatullogulomjonov.page;
 
-import com.epam.training.oyatullogulomjonov.model.Mail;
 import com.epam.training.oyatullogulomjonov.util.StringUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -48,38 +47,49 @@ public class YahooMailPage extends AbstractPage {
     public boolean isPageOpen() {      
       return driverWaitForVisibilityOf(composeButton, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }
-
-    public void logOut() {
+    
+    public YahooMailPage clickAccountProfileButton() {
       accountProfileButton.click();
+      return this;
+    }
+    
+    public YahooLoginPage clickProfileSignOutButton() {
       driverWaitForElementToBeClickable(profileSignOutButtonBy, WAIT_TIMEOUT_SECONDS).click();
-    }   
+      return new YahooLoginPage(driver);    
+    }
     
-    public void clickComposeButton() {
+    public YahooMailPage clickComposeButton() {
       composeButton.click();
+      return this;
     }
     
-    public void sendKeysToMailToTextBox(String mailTo) {
+    public YahooMailPage sendKeysToMailToTextBox(String mailTo) {
       driverWaitForElementToBeClickable(mailToTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(mailTo);
+      return this;
     }
     
-    public void sendKeysToMailSubjectTextBox(String mailSubject) {
+    public YahooMailPage sendKeysToMailSubjectTextBox(String mailSubject) {
       mailSubjectTextBox.sendKeys(mailSubject);
+      return this;
     }
     
-    public void sendKeysToMailContentTextBox(String mailContent) {
+    public YahooMailPage sendKeysToMailContentTextBox(String mailContent) {
       mailContentTextBox.sendKeys(mailContent);
+      return this;
     }
     
-    public void clickSendMailButton() {
+    public YahooMailPage clickSendMailButton() {
       sendMailButton.click();
+      return this;
     }
     
     public boolean isMailSent() {
       return driverWaitForPresenceOfElementLocated(mailSentMessageTextBoxBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }
         
-    public void clickMail(WebElement mail) {
+    public YahooMailPage clickMail(WebElement mail) {
       mail.click();
+      return this;
     }
     
     public String getMailFromText() {

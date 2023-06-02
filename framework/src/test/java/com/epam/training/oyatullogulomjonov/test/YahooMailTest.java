@@ -2,7 +2,6 @@ package com.epam.training.oyatullogulomjonov.test;
 
 import com.epam.training.oyatullogulomjonov.model.User;
 import com.epam.training.oyatullogulomjonov.service.YahooUserCreator;
-import com.epam.training.oyatullogulomjonov.page.YahooHomePage;
 import com.epam.training.oyatullogulomjonov.page.YahooLoginPage;
 import com.epam.training.oyatullogulomjonov.page.YahooMailPage;
 import org.testng.annotations.Test;
@@ -13,6 +12,7 @@ public class YahooMailTest extends CommonConditions {
     public void loginWithValidEmailAndValidPassword() {
       User user = new YahooUserCreator().withValidCredentials();
       YahooMailPage mailPage = new YahooLoginPage(driver)
+      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickNextButton()
       			.enterPassword(user.getPassword())
@@ -25,10 +25,11 @@ public class YahooMailTest extends CommonConditions {
     public void loginWithValidEmailAndWrongPassword() {
       User user = new YahooUserCreator().withWrongPassword();    
       YahooLoginPage loginPage = new YahooLoginPage(driver)
+      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickNextButton()
       			.enterPassword(user.getPassword());
-      YahooHomePage homePage = loginPage.clickSignInButton();
+      loginPage.clickSignInButton();
       Assert.assertTrue(loginPage.isPasswordWrong(), "Wrong password is accepted as valid");
     }
     
@@ -36,6 +37,7 @@ public class YahooMailTest extends CommonConditions {
     public void loginWithWrongEmail() {
       User user = new YahooUserCreator().withWrongEmail();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
+      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickNextButton();
       Assert.assertTrue(loginPage.isEmailNotRegistered(), "Wrong email is accepted as valid");
@@ -45,6 +47,7 @@ public class YahooMailTest extends CommonConditions {
     public void loginWithEmptyAccount() {
       User user = new YahooUserCreator().withEmptyEmail();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
+      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickNextButton();
       Assert.assertTrue(loginPage.isEmailNotRegistered(), "Empty account username is not ignored");
@@ -54,10 +57,11 @@ public class YahooMailTest extends CommonConditions {
     public void loginWithValidEmailAndEmptyPassword() {
       User user = new YahooUserCreator().withEmptyPassword();
       YahooLoginPage loginPage = new YahooLoginPage(driver)
+      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickNextButton()
       			.enterPassword(user.getPassword());
-      YahooHomePage homePage = loginPage.clickSignInButton();
+      loginPage.clickSignInButton();
       Assert.assertTrue(loginPage.isPasswordWrong(), "Empty password is accepted as valid");
     }   
 }

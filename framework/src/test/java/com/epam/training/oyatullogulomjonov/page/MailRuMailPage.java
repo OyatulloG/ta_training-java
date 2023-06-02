@@ -1,6 +1,5 @@
 package com.epam.training.oyatullogulomjonov.page;
 
-import com.epam.training.oyatullogulomjonov.model.Mail;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.By;
@@ -43,44 +42,53 @@ public class MailRuMailPage extends AbstractPage {
       return driverWaitForPresenceOfElementLocated(composeButtonBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }    
 	    
-    public void clickAccountButton() {
-      driverWaitForElementToBeClickable(accountButtonBy, WAIT_TIMEOUT_SECONDS).click();      
+    public MailRuMailPage clickAccountButton() {
+      driverWaitForElementToBeClickable(accountButtonBy, WAIT_TIMEOUT_SECONDS).click();
+      return this;      
     }
     
-    public void clickAccountLogoutButton() {
+    public MailRuLoginPage clickAccountLogoutButton() {
       driverWaitForElementToBeClickable(accountLogoutButtonBy, WAIT_TIMEOUT_SECONDS).click();
+      return new MailRuLoginPage(driver);
     }
     
-    public void clickComposeButton() {
-      driverWaitForElementToBeClickable(composeButtonBy, WAIT_TIMEOUT_SECONDS).click();    
+    public MailRuMailPage clickComposeButton() {
+      driverWaitForElementToBeClickable(composeButtonBy, WAIT_TIMEOUT_SECONDS).click();
+      return this;
     }
     
-    public void sendKeysToMailToTextBox(String mailTo) {
-      driverWaitForElementToBeClickable(mailToTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(mailTo);    
+    public MailRuMailPage sendKeysToMailToTextBox(String mailTo) {
+      driverWaitForElementToBeClickable(mailToTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(mailTo);
+      return this;
     }
     
-    public void sendKeysToMailSubjectTextBox(String mailSubject) {
+    public MailRuMailPage sendKeysToMailSubjectTextBox(String mailSubject) {
       mailSubjectTextBox.sendKeys(mailSubject);
+      return this;
     }
     
-    public void sendKeysToMailContentTextBox(String mailContent) {
+    public MailRuMailPage sendKeysToMailContentTextBox(String mailContent) {
       mailContentTextBox.sendKeys(mailContent);
+      return this;
     }
     
-    public void clickSendMailButton() {
-      driverWaitForElementToBeClickable(sendMailButtonBy, WAIT_TIMEOUT_SECONDS).click();    
+    public MailRuMailPage clickSendMailButton() {
+      driverWaitForElementToBeClickable(sendMailButtonBy, WAIT_TIMEOUT_SECONDS).click();
+      return this;
     }
     
     public boolean isMailSent() {
       return driverWaitForPresenceOfElementLocated(mailSentMessageTextBoxBy, WAIT_TIMEOUT_SECONDS).isDisplayed();
     }
     
-    public void clickMailSentMessageCloseButton() {
+    public MailRuMailPage clickMailSentMessageCloseButton() {
       driverWaitForElementToBeClickable(mailSentMessageCloseButtonBy, WAIT_TIMEOUT_SECONDS).click();
+      return this;
     }
         
-    public void clickMail(WebElement mail) {
+    public MailRuMailPage clickMail(WebElement mail) {
       mail.click();
+      return this;
     }       
     
     public String getMailFromText() {

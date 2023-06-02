@@ -29,12 +29,19 @@ public class YahooService {
       return this;
     }
     
+    public YahooService removeAccount() {
+      loginPage.openPage()
+      		.clickAccountSwitcherThreeDotsButton()
+      		.clickRemoveAccountButton();
+      return this;
+    }
+    
     public YahooMailPage sendMail(Mail mail) {
-      mailPage.clickComposeButton();
-      mailPage.sendKeysToMailToTextBox(mail.getMailTo());
-      mailPage.sendKeysToMailSubjectTextBox(mail.getSubject());
-      mailPage.sendKeysToMailContentTextBox(mail.getContent());
-      mailPage.clickSendMailButton();
+      mailPage.clickComposeButton()
+      		.sendKeysToMailToTextBox(mail.getMailTo())
+      		.sendKeysToMailSubjectTextBox(mail.getSubject())
+      		.sendKeysToMailContentTextBox(mail.getContent())
+      		.clickSendMailButton();
       logger.info("New Mail is sent");
       return mailPage;   
     }
@@ -50,5 +57,11 @@ public class YahooService {
       String mailContent = mailPage.getMailContentText();
       Mail receivedMail = new Mail(mailFrom, mailPage.YAHOOMAIL, sentMail.getSubject(), mailContent);
       return receivedMail.equals(sentMail);   
-    }   
+    }
+    
+    public YahooService logOut() {
+      mailPage.clickAccountProfileButton()
+      		.clickProfileSignOutButton();
+      return this;
+    }
 }

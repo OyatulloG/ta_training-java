@@ -3,8 +3,6 @@ package com.epam.training.oyatullogulomjonov.test;
 import com.epam.training.oyatullogulomjonov.driver.DriverSingleton;
 import com.epam.training.oyatullogulomjonov.util.TestListener;
 import com.epam.training.oyatullogulomjonov.page.MailRuMailPage;
-import com.epam.training.oyatullogulomjonov.page.YahooLoginPage;
-import com.epam.training.oyatullogulomjonov.page.YahooMailPage;
 import com.epam.training.oyatullogulomjonov.service.MailRuService;
 import com.epam.training.oyatullogulomjonov.service.YahooService;
 import org.openqa.selenium.WebDriver;
@@ -40,7 +38,7 @@ public class CommonConditions {
     
     @AfterMethod(onlyForGroups = {"yahooLogOut"})
     public void logOutFromYahoo() {
-      new YahooMailPage(driver).logOut();      	      	
-      new YahooLoginPage(driver).removeAccount();    
+      new YahooService(driver).logOut()
+      				.removeAccount();
     }    
 }

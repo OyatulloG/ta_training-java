@@ -39,10 +39,15 @@ public class YahooLoginPage extends AbstractPage {
       logger.info("Yahoo Login page opened");
       return this;
     }
-    
-    public void removeAccount() {
+        
+    public YahooLoginPage clickAccountSwitcherThreeDotsButton() {
       driverWaitForElementToBeClickable(accountSwitcherThreeDotsButtonBy, WAIT_TIMEOUT_SECONDS).click();
+      return this;
+    }
+    
+    public YahooLoginPage clickRemoveAccountButton() {
       driverWaitForElementToBeClickable(removeAccountButtonBy, WAIT_TIMEOUT_SECONDS).click();
+      return this;
     }
     
     public YahooLoginPage enterEmail(String email) {

@@ -12,6 +12,7 @@ public class MailRuTest extends CommonConditions {
     public void loginWithValidEmailAndValidPassword() {
       User user = new MailRuUserCreator().withValidCredentials();
       MailRuMailPage mailPage = new MailRuLoginPage(driver)
+      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickEnterPasswordButton()
       			.enterPassword(user.getPassword())
@@ -23,11 +24,11 @@ public class MailRuTest extends CommonConditions {
     public void loginWithValidEmailAndWrongPassword() { 
       User user = new MailRuUserCreator().withWrongPassword();    
       MailRuLoginPage loginPage = new MailRuLoginPage(driver);
-      MailRuMailPage mailPage = loginPage
-      			.enterEmail(user.getEmail())
-      			.clickEnterPasswordButton()
-      			.enterPassword(user.getPassword())
-      			.clickSignInButton();
+      loginPage.openPage()
+      		.enterEmail(user.getEmail())
+      		.clickEnterPasswordButton()
+      		.enterPassword(user.getPassword())
+      		.clickSignInButton();
       Assert.assertTrue(loginPage.isPasswordWrong(), "Wrong password is accepted as valid");
     }
 
@@ -35,6 +36,7 @@ public class MailRuTest extends CommonConditions {
     public void loginWithWrongEmail() {
       User user = new MailRuUserCreator().withWrongEmail();
       MailRuLoginPage loginPage = new MailRuLoginPage(driver)
+      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickEnterPasswordButton();
       Assert.assertTrue(loginPage.isAccountNotRegistered(), "Wrong email is accepted as valid");
@@ -44,6 +46,7 @@ public class MailRuTest extends CommonConditions {
     public void loginWithEmptyAccount() {
       User user = new MailRuUserCreator().withEmptyEmail();
       MailRuLoginPage loginPage = new MailRuLoginPage(driver)
+      			.openPage()
       			.enterEmail(user.getEmail())
       			.clickEnterPasswordButton();
       Assert.assertTrue(loginPage.isAccountEmpty(), "Empty account username is not ignored");
@@ -53,11 +56,11 @@ public class MailRuTest extends CommonConditions {
     public void loginWithValidEmailAndEmptyPassword() {
       User user = new MailRuUserCreator().withEmptyPassword();
       MailRuLoginPage loginPage = new MailRuLoginPage(driver);
-      MailRuMailPage mailPage = loginPage
-      			.enterEmail(user.getEmail())
-      			.clickEnterPasswordButton()
-      			.enterPassword(user.getPassword())
-      			.clickSignInButton();
+      loginPage.openPage()
+      		.enterEmail(user.getEmail())
+      		.clickEnterPasswordButton()
+      		.enterPassword(user.getPassword())
+      		.clickSignInButton();
       Assert.assertTrue(loginPage.isPasswordWrong(), "Empty password is accepted as valid");
     }
 }
