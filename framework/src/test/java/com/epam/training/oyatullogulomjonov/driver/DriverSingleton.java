@@ -26,7 +26,7 @@ public class DriverSingleton {
             chromeOptions.addArguments("--remote-allow-origins=*");
             chromeOptions.addArguments("--window-size=1920,1080");            
             chromeOptions.addArguments("--allow-insecure-localhost");
-            //chromeOptions.addArguments("--headless");
+            chromeOptions.addArguments("--headless");
             chromeOptions.addArguments("--disable-gpu");
             chromeOptions.addArguments("--no-sandbox");
             chromeOptions.addArguments("--ignore-certificate-errors");            
