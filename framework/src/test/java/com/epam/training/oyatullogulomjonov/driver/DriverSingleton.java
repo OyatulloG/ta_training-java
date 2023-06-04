@@ -27,15 +27,15 @@ public class DriverSingleton {
             WebDriverManager.chromedriver().setup();
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.addArguments("--remote-allow-origins=*");
-            chromeOptions.addArguments("--window-size=1920,1080");            
-            chromeOptions.addArguments("--allow-insecure-localhost");
+            //chromeOptions.addArguments("--window-size=1920,1080");            
+            //chromeOptions.addArguments("--allow-insecure-localhost");
             chromeOptions.addArguments("--headless");
-            chromeOptions.addArguments("--disable-gpu");
-            chromeOptions.addArguments("--no-sandbox");
-            chromeOptions.addArguments("--ignore-certificate-errors");            
-            chromeOptions.addArguments("--allow-running-insecure-content");
-            chromeOptions.addArguments("--disable-setuid-sandbox");
-            chromeOptions.addArguments("--disable-dev-shm-usage");
+            //chromeOptions.addArguments("--disable-gpu");
+            //chromeOptions.addArguments("--no-sandbox");
+            //chromeOptions.addArguments("--ignore-certificate-errors");            
+            //chromeOptions.addArguments("--allow-running-insecure-content");
+            //chromeOptions.addArguments("--disable-setuid-sandbox");
+            //chromeOptions.addArguments("--disable-dev-shm-usage");
             driver = new ChromeDriver(chromeOptions);
           }
         }
