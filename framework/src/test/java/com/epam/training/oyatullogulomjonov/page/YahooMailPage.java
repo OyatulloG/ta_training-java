@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.interactions.Actions;
 import java.util.List;
 
 public class YahooMailPage extends AbstractPage {   
@@ -74,7 +75,9 @@ public class YahooMailPage extends AbstractPage {
     }
     
     public YahooMailPage sendKeysToMailContentTextBox(String mailContent) {
-      mailContentTextBox.sendKeys(mailContent);
+      new Actions(driver)
+      		.sendKeys(mailContentTextBox, mailContent)
+      		.perform();      
       return this;
     }
     
