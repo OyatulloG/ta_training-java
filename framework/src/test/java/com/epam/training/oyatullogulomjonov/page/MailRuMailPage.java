@@ -22,9 +22,7 @@ public class MailRuMailPage extends AbstractPage {
     @FindBy(name = "Subject")
     private WebElement mailSubjectTextBox;
     
-    @FindBy(xpath = "//*[@role='textbox']//div")
-    private WebElement mailContentTextBox;
-        
+    private By mailContentTextBoxBy = By.xpath("//*[@role='textbox']/div");            
     private By sendMailButtonBy = By.xpath("//*[@data-test-id='send']");
     private By mailSentMessageTextBoxBy = By.className("layer-sent-page");  
     private By mailSentMessageCloseButtonBy = By.xpath("//*[@class='layer-sent-page']//span");
@@ -69,6 +67,7 @@ public class MailRuMailPage extends AbstractPage {
     }
     
     public MailRuMailPage sendKeysToMailContentTextBox(String mailContent) {
+      WebElement mailContentTextBox = driverWaitForElementToBeClickable(mailContentTextBoxBy, WAIT_TIMEOUT_SECONDS);
       new Actions(driver)
       		.sendKeys(mailContentTextBox, mailContent)
       		.perform();
