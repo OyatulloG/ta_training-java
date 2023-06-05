@@ -18,9 +18,7 @@ public class YahooMailPage extends AbstractPage {
     @FindBy(xpath = "//*[@data-test-id='compose-button']")
     private WebElement composeButton;
     
-    @FindBy(id = "ybarAccountProfile")
-    private WebElement accountProfileButton;
-    
+    private By accountProfileButtonBy = By.id("ybarAccountProfile");
     private By profileSignOutButtonBy = By.id("profile-signout-link");
     private By mailToTextBoxBy = By.id("message-to-field");
 
@@ -50,7 +48,7 @@ public class YahooMailPage extends AbstractPage {
     }
     
     public YahooMailPage clickAccountProfileButton() {
-      accountProfileButton.click();
+      driverWaitForElementToBeClickable(accountProfileButtonBy, WAIT_TIMEOUT_SECONDS).click();
       return this;
     }
     
