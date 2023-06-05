@@ -27,8 +27,7 @@ public class IntegrationTest extends CommonConditions {
     	Assert.assertTrue(mailRuMailPage.isMailSent(), "Mail is not sent");
     }
     
-    @Test(description = "Check that Yahoo has received mail from MailRu", priority = 2,
-    		dependsOnMethods = {"verifyMailSentFromMailRuToYahoo"}, groups = {"yahooLogOut"})
+    @Test(description = "Check that Yahoo has received mail from MailRu", priority = 2, groups = {"yahooLogOut"})
     public void verifyYahooReceivedMailFromMailRu() {
 	YahooService yahooService = new YahooService(driver).login(yahooUser);
       	Assert.assertTrue(yahooService.isMailReceived(mailRuMail), "Mail from MailRu is not received"); 	
@@ -41,8 +40,7 @@ public class IntegrationTest extends CommonConditions {
       	Assert.assertTrue(yahooMailPage.isMailSent(), "Mail is not sent");
     }
     
-    @Test(description = "Check that MailRu received mail from Yahoo", priority = 4,
-    		dependsOnMethods = {"verifyMailSentFromYahooToMailRu"}, groups = {"mailRuLogOut"})
+    @Test(description = "Check that MailRu received mail from Yahoo", priority = 4, groups = {"mailRuLogOut"})
     public void verifyMailRuReceivedMailFromYahoo() {
 	MailRuService mailRuService = new MailRuService(driver).login(mailRuUser);
 	Assert.assertTrue(mailRuService.isMailReceived(yahooMail), "Mail from Yahoo is not received");	
