@@ -13,14 +13,9 @@ public class YahooLoginPage extends AbstractPage {
     private final Logger logger = LogManager.getRootLogger();
         
     private By accountSwitcherThreeDotsButtonBy = By.xpath("//*[@id='account-switcher-form']//*[@class='card-right']");        
-    private By removeAccountButtonBy = By.xpath("//*[@data-action='remove-account']");
-        
-    @FindBy(id = "login-username")
-    private WebElement usernameEmailOrMobileTextBox;
-    
-    @FindBy(id = "login-signin")
-    private WebElement signInButton;
-    
+    private By removeAccountButtonBy = By.xpath("//*[@data-action='remove-account']");        
+    private By usernameEmailOrMobileTextBoxBy = By.id("login-username");    
+    private By signInButtonBy = By.id("login-signin");    
     private By passwordTextBoxBy = By.id("login-passwd");
     
     @FindBy(id = "username-error")
@@ -51,12 +46,12 @@ public class YahooLoginPage extends AbstractPage {
     }
     
     public YahooLoginPage enterEmail(String email) {
-      usernameEmailOrMobileTextBox.sendKeys(email);     
+      driverWaitForElementToBeClickable(usernameEmailOrMobileTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(email);
       return this;
     }
     
     public YahooLoginPage clickNextButton() {
-      signInButton.click();
+      driverWaitForElementToBeClickable(signInButtonBy, WAIT_TIMEOUT_SECONDS).click();
       return this;    
     }
     
@@ -66,7 +61,7 @@ public class YahooLoginPage extends AbstractPage {
     }
     
     public YahooHomePage clickSignInButton() {
-      signInButton.click();
+      driverWaitForElementToBeClickable(signInButtonBy, WAIT_TIMEOUT_SECONDS).click();      
       logger.info("Login performed");
       return new YahooHomePage(driver);      
     }
