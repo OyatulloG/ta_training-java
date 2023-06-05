@@ -34,10 +34,8 @@ public class YahooMailPage extends AbstractPage {
     private By mailSentMessageTextBoxBy = By.xpath("//*[@data-test-id='navigate-button']/parent::span");
     private By unreadMailBy = By.xpath("//a[@data-test-read='false']");
     private By unreadMailFromTextBoxBy = By.xpath("//*[@data-test-id='message-from']");
-    
-    @FindBy(xpath = "//*[@data-test-id='message-view-body-content']")
-    private WebElement unreadMailContentTextBox;
-            
+    private By unreadMailContentTextBoxBy = By.xpath("//*[@data-test-id='message-view-body-content']");
+                
     public YahooMailPage(WebDriver driver) {
       super(driver);
       PageFactory.initElements(this.driver, this);
@@ -99,6 +97,8 @@ public class YahooMailPage extends AbstractPage {
     }        
     
     public String getMailContentText() {
+      WebElement unreadMailContentTextBox = driverWaitForPresenceOfElementLocated(unreadMailContentTextBoxBy,
+      										WAIT_TIMEOUT_SECONDS);
       return StringUtils.extractMailContentForYahoo(unreadMailContentTextBox.getText());
     }    
     
