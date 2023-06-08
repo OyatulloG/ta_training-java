@@ -28,9 +28,7 @@ public class MailRuMailPage extends AbstractPage {
     private By mailSentMessageCloseButtonBy = By.xpath("//*[@class='layer-sent-page']//span");
     private By unreadMailBy = By.xpath("//*[contains(@class, 'subject_unread')]");
     private By unreadMailFromTextBoxBy = By.xpath("//*[@class='letter__author']//*[contains(@class,'letter-contact')]");
-            
-    @FindBy(className = "letter-body")
-    private WebElement unreadMailContentTextBox;
+    private By unreadMailContentTextBoxBy = By.className("letter-body");
             
     public MailRuMailPage(WebDriver driver) {
       super(driver);
@@ -99,6 +97,8 @@ public class MailRuMailPage extends AbstractPage {
     }
     
     public String getMailContentText() {
+      WebElement unreadMailContentTextBox = driverWaitForPresenceOfElementLocated(unreadMailContentTextBoxBy,
+      											WAIT_TIMEOUT_SECONDS);
       return unreadMailContentTextBox.getText();     
     }
     
