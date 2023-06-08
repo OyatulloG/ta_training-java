@@ -12,16 +12,10 @@ public class MailRuLoginPage extends AbstractPage {
     private final String PAGE_URL = "https://account.mail.ru";
     private final Logger logger = LogManager.getRootLogger();
 
-    private By accountTextBoxBy = By.name("username");
-    
-    @FindBy(xpath = "//*[@data-test-id='next-button']")
-    private WebElement enterPasswordButton;
-    
-    private By passwordTextBoxBy = By.name("password");
-    
-    @FindBy(xpath = "//*[@data-test-id='submit-button']")
-    private WebElement signInButton;
-
+    private By accountTextBoxBy = By.name("username");    
+    private By enterPasswordButtonBy = By.xpath("//*[@data-test-id='next-button']");    
+    private By passwordTextBoxBy = By.name("password");    
+    private By signInButtonBy = By.xpath("//*[@data-test-id='submit-button']");
     private By accountNotRegisteredTextBoxBy = By.xpath("//*[@data-test-id='accountNotRegistered']");
     private By wrongPasswordTextBoxBy = By.xpath("//*[@data-test-id='password-input-error']"); 
     private By accountEmptyTextBoxBy = By.xpath("//*[@data-test-id='required']");           
@@ -43,7 +37,7 @@ public class MailRuLoginPage extends AbstractPage {
     }
     
     public MailRuLoginPage clickEnterPasswordButton() {
-      enterPasswordButton.click();
+      driverWaitForElementToBeClickable(enterPasswordButtonBy, WAIT_TIMEOUT_SECONDS).click();
       return this;      
     }
     
@@ -53,7 +47,7 @@ public class MailRuLoginPage extends AbstractPage {
     }
     
     public MailRuMailPage clickSignInButton() {
-      signInButton.click();
+      driverWaitForElementToBeClickable(signInButtonBy, WAIT_TIMEOUT_SECONDS).click();
       logger.info("Login performed");
       return new MailRuMailPage(driver);    
     }
