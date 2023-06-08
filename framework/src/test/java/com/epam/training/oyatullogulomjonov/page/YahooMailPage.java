@@ -1,8 +1,6 @@
 package com.epam.training.oyatullogulomjonov.page;
 
 import com.epam.training.oyatullogulomjonov.util.StringUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,7 +10,6 @@ import org.openqa.selenium.interactions.Actions;
 import java.util.List;
 
 public class YahooMailPage extends AbstractPage {   
-    private final Logger logger = LogManager.getRootLogger();
     public final String YAHOOMAIL = "sampleonesample@yahoo.com";
     
     @FindBy(xpath = "//*[@data-test-id='compose-button']")

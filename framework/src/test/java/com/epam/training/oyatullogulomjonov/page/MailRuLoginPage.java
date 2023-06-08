@@ -5,8 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 public class MailRuLoginPage extends AbstractPage {    
     private final String PAGE_URL = "https://account.mail.ru";
@@ -22,7 +20,6 @@ public class MailRuLoginPage extends AbstractPage {
     
     public MailRuLoginPage(WebDriver driver) {
       super(driver);
-      PageFactory.initElements(this.driver, this);
     }
     
     public MailRuLoginPage openPage() {

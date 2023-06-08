@@ -1,27 +1,19 @@
 package com.epam.training.oyatullogulomjonov.page;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.interactions.Actions;
 import java.util.List;
 
 public class MailRuMailPage extends AbstractPage {    
-    private final Logger logger = LogManager.getRootLogger();
     public final String MAILRU = "sampletwosample@mail.ru";
 
     private By composeButtonBy = By.xpath("//*[@href='/compose/']");
     private By accountButtonBy = By.xpath("//*[@data-testid='whiteline-account']");    
     private By accountLogoutButtonBy = By.xpath("//*[@data-testid='whiteline-account-exit']");    
     private By mailToTextBoxBy = By.xpath("//*[@data-type='to']//input");
-
-    @FindBy(name = "Subject")
-    private WebElement mailSubjectTextBox;
-    
+    private By mailSubjectTextBoxBy = By.name("Subject");    
     private By mailContentTextBoxBy = By.xpath("//*[@role='textbox']/div");            
     private By sendMailButtonBy = By.xpath("//*[@data-test-id='send']");
     private By mailSentMessageTextBoxBy = By.className("layer-sent-page");  
@@ -32,7 +24,6 @@ public class MailRuMailPage extends AbstractPage {
             
     public MailRuMailPage(WebDriver driver) {
       super(driver);
-      PageFactory.initElements(this.driver, this);
     }
     
     public boolean isPageOpen() {
@@ -60,7 +51,7 @@ public class MailRuMailPage extends AbstractPage {
     }
     
     public MailRuMailPage sendKeysToMailSubjectTextBox(String mailSubject) {
-      mailSubjectTextBox.sendKeys(mailSubject);
+      driverWaitForElementToBeClickable(mailSubjectTextBoxBy, WAIT_TIMEOUT_SECONDS).sendKeys(mailSubject);
       return this;
     }
     
