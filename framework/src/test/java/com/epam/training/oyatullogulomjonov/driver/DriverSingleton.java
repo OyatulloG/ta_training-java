@@ -29,7 +29,6 @@ public class DriverSingleton {
             chromeOptions.addArguments("--remote-allow-origins=*");
             chromeOptions.addArguments("--window-size=1920,1080");            
             chromeOptions.addArguments("--headless");            
-            chromeOptions.addArguments("--disable-dev-shm-usage");            
             driver = new ChromeDriver(chromeOptions);
           }
         }
